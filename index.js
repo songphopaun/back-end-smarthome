@@ -20,19 +20,65 @@ const Users =require('./Model/users')
 const auth = require('./routes/auth')
 app.use('/api',auth)
 
-app.get("/add",async(req, res) => {
-    const setData ={
-        home_id:"1",
-        room_icon:"https://img.icons8.com/ios/452/bedroom.png",
-        room_name:"Bedroom",
-    }
-    await Room.create(setData).then(obj=>{
-        console.log(obj)
-    }).catch(err=>{
-        console.log(err)
-    })
+const room = require('./routes/room')
+app.use('/api',room)
+
+// app.get("/add",async(req, res) => {
+//     const setData ={
+//         home_id:"1",
+//         room_icon:"https://img.icons8.com/ios/452/bedroom.png",
+//         room_name:"Bedroom2",
+//     }
+//     await Room.create(setData).then(obj=>{
+//         console.log(obj)
+//     }).catch(err=>{
+//         console.log(err)
+//     })
     
-  });
+//   });
 
+// app.get("/add/sensor",async(req, res) => {
+//     const setData ={
+//         room_id:"1",
+//         sensor_name:"Temp",
+//         sensor_icon:"https://img.icons8.com/ios/452/bedroom.png",
 
+//     }
+//     await Sensor.create(setData).then(obj=>{
+//         console.log(obj)
+//     }).catch(err=>{
+//         console.log(err)
+//     })
+//   });
+
+// app.get("/add/sensor_data",async(req, res) => {
+//     const setData ={
+//         sensor_id:"2",
+//         room_id:"1",
+//         value:"30"
+
+//     }
+//     await SensorData.create(setData).then(obj=>{
+//         console.log(obj)
+//     }).catch(err=>{
+//         console.log(err)
+//     })
+//   });
+
+// app.get("/add/device",async(req, res) => {
+//     const setData ={
+//         room_id:"1",
+//         sensor_id:"2",
+//         device_name:"Test2",
+//         status:"false",
+//         value:"10",
+//         type:"TestType",
+//         device_icon:"https://img.icons8.com/ios/452/bedroom.png"
+//     }
+//     await Switch.create(setData).then(obj=>{
+//         console.log(obj)
+//     }).catch(err=>{
+//         console.log(err)
+//     })
+//   });
 app.listen(PORT, () => { console.log(`Server is running on port : ${PORT}`)});

@@ -7,10 +7,12 @@ const Device = sequelize.define("device", {
         primaryKey:true
     },
     room_id:DataTypes.INTEGER,
-    sensor_id:DataTypes.INTEGER,
+    // sensor_id:DataTypes.INTEGER,
+    device_name:DataTypes.STRING,
     status:DataTypes.STRING,
     value:DataTypes.INTEGER,
     type:DataTypes.STRING,
+    device_icon:DataTypes.STRING,
 });
 
 Device.sync({alter:true})

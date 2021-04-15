@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config.js");
+
 const SensorData = sequelize.define("sensor_data", {
     sensor_data_id:{
         type:DataTypes.INTEGER,
@@ -8,9 +9,12 @@ const SensorData = sequelize.define("sensor_data", {
     },
     sensor_id:DataTypes.INTEGER,
     room_id:DataTypes.INTEGER,
-    sensor_name_:DataTypes.STRING,
+    // sensor_name_:DataTypes.STRING,
     value:DataTypes.FLOAT,
 });
+// SensorData.associate = function(models) {
+//     SensorData.belongsTo(models.sensor, {foreignKey: 'sensor_id'});
+// }
 
 SensorData.sync({alter:true})
 module.exports = SensorData;
