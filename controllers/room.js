@@ -22,31 +22,49 @@ const dataRoom = (req, res) => {
   Sensor.hasOne(Sensor_data, { foreignKey: "sensor_id" });
   Sensor_data.belongsTo(Sensor, { foreignKey: "sensor_id" });
   let room_id = req.query.room_id;
-  Sensor_data.findAll({
-    // attributes: [[Sequelize.literal('DISTINCT `key`'), 'key'], 'sensor_id'],
+  let sensor_length = null;
+  var id_sensor = [];
+  var newData = []
+
+  Sensor.findAll({
     where: { room_id: room_id },
-    order: [["sensor_id", "ASC"]],
-    include: [
-      {
-        model: Sensor,
-        attributes: ["sensor_name", "sensor_icon",[Sequelize.literal('DISTINCT `key`'), 'key'], 'sensor_id'],
-      },
-    ],
   }).then((result) => {
-    if (result) {
-      console.log(result.length);
-      res.json({ data: result });
-    } else {
-      res.json({ status: false });
+    sensor_length = result.length;
+    for (let i = 0; i < result.length; i++){
+      id_sensor.push(result[i].dataValues.sensor_id);
     }
-  });
+  }).then(()=>{
+    Sensor_data.findAll({
+      where: { room_id: room_id },
+      order: [["sensor_id", "DESC"]],
+      include: [
+        {
+          model: Sensor,
+          attributes: ["sensor_name", "sensor_icon","sensor_unit"],
+        },
+      ],
+    })
+      .then( (result) => {
+        if (result) {
+          for (let i = 0; i <= sensor_length; i++) {
+            const findData = result.find((item) => item.sensor_id == id_sensor[i])
+            if(findData){
+            newData.push(findData);
+            }
+          }
+          res.json({ data: newData });
+        } else {
+          res.json({ status: false });
+        }
+      })
+  })
 };
 
 const deviceRoom = (req, res) => {
   let room_id = req.query.room_id;
   Device.findAll({
     where: { room_id: room_id },
-    order: [["device_id", "ASC"]],
+    order: [["device_id", "DESC"]],
   }).then((result) => {
     if (result) {
       res.json({ data: result });

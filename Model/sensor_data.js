@@ -12,9 +12,6 @@ const SensorData = sequelize.define("sensor_data", {
     // sensor_name_:DataTypes.STRING,
     value:DataTypes.FLOAT,
 });
-// SensorData.associate = function(models) {
-//     SensorData.belongsTo(models.sensor, {foreignKey: 'sensor_id'});
-// }
 
 SensorData.sync({alter:true})
 module.exports = SensorData;

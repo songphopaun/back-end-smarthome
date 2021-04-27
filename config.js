@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('smarthome', 'postgres', 'bu12345', {
-  host: '18.136.100.9',
+  host: '18.139.85.83',
   port:'5432',
   dialect: 'postgres',
   logging: false

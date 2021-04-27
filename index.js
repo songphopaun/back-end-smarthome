@@ -15,6 +15,7 @@ const Sensor =require('./Model/sensor')
 const SensorData =require('./Model/sensor_data')
 const Switch =require('./Model/switch')
 const Users =require('./Model/users')
+const Covid =require('./Model/covid')
 
 
 const auth = require('./routes/auth')
@@ -23,6 +24,11 @@ app.use('/api',auth)
 const room = require('./routes/room')
 app.use('/api',room)
 
+const covid = require('./routes/covid')
+app.use('/api',covid)
+
+const chart = require('./routes/chart')
+app.use('/api',chart)
 // app.get("/add",async(req, res) => {
 //     const setData ={
 //         home_id:"1",

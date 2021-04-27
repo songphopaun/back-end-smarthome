@@ -7,14 +7,12 @@ const Sensor = sequelize.define("sensor", {
         autoIncrement:true,
         primaryKey:true
     },
+    home_id:DataTypes.INTEGER,
     room_id:DataTypes.INTEGER,
     sensor_name:DataTypes.STRING,
     sensor_icon:DataTypes.STRING,
-
+    sensor_unit:DataTypes.STRING,
+    sensor_type:DataTypes.STRING
 });
-// Sensor.associate = function(models) {
-//     Sensor.hasOne(models.sensor_data, {foreignKey: 'sensor_id'});
-// }
-
 Sensor.sync({alter:true})
 module.exports = Sensor;

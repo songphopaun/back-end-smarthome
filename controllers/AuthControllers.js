@@ -46,18 +46,16 @@ const login = (req, res) => {
         result.dataValues.password,
         function (err, hash) {
           if (hash) {
-            let key = result.dataValues.user_id;
+            let key = {
+              key:result.dataValues.user_id,
+              home_id:result.dataValues.home_id
+            }
             let token = jwt.sign({ key }, "secretValue", { expiresIn: "48h" });
             console.log(result.dataValues);
             res.json({
               massage: "Login Successful!",
               status: true,
               token: token,
-              // data: {
-              //   home_id: result.dataValues.home_id,
-              //   username: result.dataValues.username,
-              //   email: result.dataValues.email,
-              // },
             });
           } else {
             console.log("Password does not matched.");
@@ -73,7 +71,7 @@ const login = (req, res) => {
 };
 
 const userInfo = (req, res) => {
-  let user_id = req.user.key;
+  let user_id = req.user.key.key;
   Users.findOne({ where: { user_id: user_id } }).then((result) => {
     if (result) {
       res.json({
