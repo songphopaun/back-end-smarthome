@@ -18,6 +18,10 @@ const Users =require('./Model/users')
 const Covid =require('./Model/covid')
 
 
+app.get('/',(req,res)=>{
+    res.send("<h1>Hello Server Smart Home</h1>");
+})
+
 const auth = require('./routes/auth')
 app.use('/api',auth)
 
