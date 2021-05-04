@@ -38,7 +38,6 @@ const register = (req, res, next) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body);
   Users.findOne({ where: { email: email } }).then((result) => {
     if (result) {
       bcrypt.compare(
@@ -51,7 +50,6 @@ const login = (req, res) => {
               home_id:result.dataValues.home_id
             }
             let token = jwt.sign({ key }, "secretValue", { expiresIn: "48h" });
-            console.log(result.dataValues);
             res.json({
               massage: "Login Successful!",
               status: true,
@@ -70,6 +68,16 @@ const login = (req, res) => {
   });
 };
 
+const loginFaceId = (req,res) =>{
+  const id = req.headers.id
+  Users.findOne({ where:{ user_id : id}}).then((result)=>{
+    if(result){
+      let token = jwt.sign({ id }, "secretValue", { expiresIn: "48h" });
+      res.json({token:token})
+    }
+  })
+}
+
 const userInfo = (req, res) => {
   let user_id = req.user.key.key;
   Users.findOne({ where: { user_id: user_id } }).then((result) => {
@@ -77,6 +85,7 @@ const userInfo = (req, res) => {
       res.json({
         status: true,
         data: {
+          user_id:result.dataValues.user_id,
           home_id: result.dataValues.home_id,
           username: result.dataValues.username,
           email: result.dataValues.email,
@@ -87,4 +96,4 @@ const userInfo = (req, res) => {
     }
   });
 };
-module.exports = { register, login, userInfo };
+module.exports = { register, login, userInfo, loginFaceId };

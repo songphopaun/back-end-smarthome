@@ -29,6 +29,17 @@ app.use('/api',covid)
 
 const chart = require('./routes/chart')
 app.use('/api',chart)
+
+const modal = require('./routes/modal')
+app.use('/api',modal)
+
+const upload = require('./middleware/upload');
+app.use('/uploads',express.static('uploads'))
+
+const uploads = require('./routes/uploads')
+app.use('/api',uploads)
+
+
 // app.get("/add",async(req, res) => {
 //     const setData ={
 //         home_id:"1",
