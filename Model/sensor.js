@@ -12,7 +12,9 @@ const Sensor = sequelize.define("sensor", {
     sensor_name:DataTypes.STRING,
     sensor_icon:DataTypes.STRING,
     sensor_unit:DataTypes.STRING,
-    sensor_type:DataTypes.STRING
+    sensor_type:DataTypes.STRING,
+    key:DataTypes.STRING
+
 });
 Sensor.sync({alter:true})
 module.exports = Sensor;

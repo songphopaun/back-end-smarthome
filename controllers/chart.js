@@ -111,23 +111,25 @@ const chartDataOneSensor2 = (req, res) => {
 const chartPower = (req,res)=>{
   let home_id = req.query.home_id
   Sensor.findOne({
-    where:{home_id:home_id,sensor_type:'Power'}
+    where:{home_id:home_id,sensor_type:'energy'}
   }).then((result)=>{
-    let sensor_id = result.dataValues.sensor_id
-    Sensor.hasOne(Sensor_data, { foreignKey: "sensor_id" });
-    Sensor_data.belongsTo(Sensor, { foreignKey: "sensor_id" });
-    Sensor_data.findOne({
-      where: { sensor_id: sensor_id },
-      order: [["sensor_data_id", "DESC"]],
-      include: [
-        {
-          model: Sensor,
-          attributes: ["sensor_name"],
-        },
-      ],
-    }).then((result) => {
-      res.json({ data: result });
-    });
+    if(result){
+      let sensor_id = result.dataValues.sensor_id
+      Sensor.hasOne(Sensor_data, { foreignKey: "sensor_id" });
+      Sensor_data.belongsTo(Sensor, { foreignKey: "sensor_id" });
+      Sensor_data.findOne({
+        where: { sensor_id: sensor_id },
+        order: [["sensor_data_id", "DESC"]],
+        include: [
+          {
+            model: Sensor,
+            attributes: ["sensor_name"],
+          },
+        ],
+      }).then((result) => {
+        res.json({ data: result });
+      });
+    }
   })
 }
 

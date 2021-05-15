@@ -15,7 +15,6 @@ const Users = sequelize.define("users", {
 });
 
 Users.sync({alter:true})
-// `sequelize.define` also returns the model
-// console.log(Users === sequelize.models.Users); // true
+
 
 module.exports = Users;

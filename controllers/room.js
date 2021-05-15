@@ -77,7 +77,6 @@ const deviceRoom = (req, res) => {
 const switchRoom = (req, res) => {
   let { device_id, status } = req.body;
   let checkType = typeof status == "boolean" ? true : false;
-  // console.log(checkType);
   if (checkType) {
     Device.update({ status: status }, { where: { device_id: device_id } }).then(
       (result) => {

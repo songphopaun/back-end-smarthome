@@ -13,6 +13,7 @@ const Device = sequelize.define("device", {
     value:DataTypes.INTEGER,
     type:DataTypes.STRING,
     device_icon:DataTypes.STRING,
+    key:DataTypes.STRING
 });
 
 Device.sync({alter:true})

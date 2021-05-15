@@ -56,13 +56,11 @@ const login = (req, res) => {
               token: token,
             });
           } else {
-            console.log("Password does not matched.");
             res.json({ message: "Password does not matched.", status: false });
           }
         }
       );
     } else {
-      console.log("No user found.");
       res.json({ message: "No user found.", status: false });
     }
   });

@@ -5,15 +5,15 @@ const Room = require("../Model/room");
 const Switch = require("../Model/switch");
 const Sensor = require("../Model/sensor");
 const Users = require("../Model/users");
-const Icon = require("../Model/icon")
+const Icon = require("../Model/icon");
 
 const addRoom = (req, res) => {
-  const {name, path_icon, home_id} = req.body
+  const { name, path_icon, home_id } = req.body;
 
   Room.create({
-    home_id:home_id,
-    room_icon:path_icon,
-    room_name:name
+    home_id: home_id,
+    room_icon: path_icon,
+    room_name: name,
   })
     .then(() => {
       res
@@ -26,45 +26,80 @@ const addRoom = (req, res) => {
 };
 
 const addDevice = (req, res) => {
-  const {name , types, room, path_icon} = req.body
-  Switch.create({
-    room_id:room,
-    device_name:name,
-    status:false,
-    value:0,
-    type:types,
-    device_icon:path_icon
-  })
-    .then(() => {
-      res
-        .status(200)
-        .json({ message: "Device Added Successfully", status: true });
-    })
-    .catch(() => {
+  const { key, name, room, path_icon } = req.body;
+
+  Switch.findOne({ where: { key: key } }).then((result)=> {
+    if (result) {
+      result
+        .update({
+          room_id: room,
+          device_name: name,
+          device_icon: path_icon,
+        })
+        .then(() => {
+          res
+            .status(200)
+            .json({ message: "Device Added Successfully", status: true });
+        })
+        .catch(() => {
+          res.status(400).json({ message: "Server is broken", status: false });
+        });
+    }else{
       res.status(400).json({ message: "Server is broken", status: false });
-    });
+    }
+  });
+
+
+  // Switch.create({
+  //   room_id: room,
+  //   device_name: name,
+  //   status: false,
+  //   value: 0,
+  //   type: types,
+  //   device_icon: path_icon,
+  // })
+  //   .then(() => {
+  //     res
+  //       .status(200)
+  //       .json({ message: "Device Added Successfully", status: true });
+  //   })
+  //   .catch(() => {
+  //     res.status(400).json({ message: "Server is broken", status: false });
+  //   });
 };
 
 const addSensor = (req, res) => {
-  const {name, types, room, path_icon, home_id} = req.body
+  const { key, name, types, room, path_icon, home_id } = req.body;
 
-  const unit = types == 'temperature' ? 'C' : 'Humidity' ? '%' : 'Pm25' ? 'µg./m3' : 'Light' ? 'Lux' : ''
-  Sensor.create({
-    room_id:room,
-    sensor_name:name,
-    sensor_icon:path_icon,
-    sensor_unit:unit,
-    sensor_type:types,
-    home_id:home_id
-  })
-    .then(() => {
-      res
-        .status(200)
-        .json({ message: "Sensor Added Successfully", status: true });
-    })
-    .catch(() => {
-      res.status(400).json({ message: "Server is broken", status: false });
-    });
+  Sensor.findOne({ where: { key: key } }).then((result)=> {
+    if (result) {
+      result
+        .update({
+          room_id: room,
+          sensor_name: name,
+          sensor_icon: path_icon,
+          home_id: home_id,
+        })
+        .then(() => {
+          res
+            .status(200)
+            .json({ message: "Sensor Added Successfully", status: true });
+        })
+        .catch(() => {
+          res.status(400).json({ message: "Server is broken", status: false });
+        });
+    }
+  });
+
+  // Sensor.update(
+  //   {
+  //     room_id: room,
+  //     sensor_name: name,
+  //     sensor_icon: path_icon,
+  //     home_id: home_id,
+  //   },
+  //   { where: { key: key } }
+  // );
 };
 
 const addUser = (req, res) => {
@@ -103,14 +138,11 @@ const addUser = (req, res) => {
 const icon = (req, res) => {
   Icon.findAll({})
     .then((result) => {
-      res
-        .status(200)
-        .json({ icon:result});
+      res.status(200).json({ icon: result });
     })
     .catch(() => {
       res.status(400).json({ message: "Server is broken", status: false });
     });
 };
 
-module.exports = { addRoom, addDevice, addSensor, addUser,icon };
-
+module.exports = { addRoom, addDevice, addSensor, addUser, icon };
