@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const Sensor_data = require("../Model/sensor_data");
 const Sensor = require("../Model/sensor");
 const Room = require("../Model/room");
+var moment = require("moment");
 
 const chartNameSensor = (req, res) => {
   let home_id = req.query.home_id;
@@ -17,8 +18,10 @@ const chartNameSensor = (req, res) => {
   });
 };
 
-const chartDataSensor = (req, res) => {
+const chartDataSensor =  (req, res) => {
+  var date = moment().format('DD')
   let sensor_id = req.query.sensor_id;
+  let day = req.query.day
   Sensor.hasOne(Sensor_data, { foreignKey: "sensor_id" });
   Sensor_data.belongsTo(Sensor, { foreignKey: "sensor_id" });
   Sensor_data.findAll({
@@ -31,7 +34,14 @@ const chartDataSensor = (req, res) => {
       },
     ],
   }).then((result) => {
-    res.json({ data: result });
+    const newData = []
+    for (let i = 0; i < result.length; i++) {
+      const newDate = moment(result[i].dataValues.updatedAt).add(-7, 'hours').format('DD')
+      if(newDate >= date-day){
+        newData.push(result[i])
+      }      
+    }
+    res.json({ data: newData });
   });
 };
 
@@ -56,7 +66,9 @@ const chartDataOneSensor = (req, res) => {
 };
 
 const chartDataSensor2 = (req, res) => {
+  var date = moment().format('DD')
   let sensor_id = req.query.sensor_id;
+  let day = req.query.day
   Sensor.hasOne(Sensor_data, { foreignKey: "sensor_id" });
   Sensor_data.belongsTo(Sensor, { foreignKey: "sensor_id" });
   Sensor_data.findAll({
@@ -69,8 +81,14 @@ const chartDataSensor2 = (req, res) => {
       },
     ],
   }).then((result) => {
-    res.json({ data: result });
-  });
+    const newData = []
+    for (let i = 0; i < result.length; i++) {
+      const newDate = moment(result[i].dataValues.updatedAt).add(-7, 'hours').format('DD')
+      if(newDate >= date-day){
+        newData.push(result[i])
+      }      
+    }
+    res.json({ data: newData });  });
 };
    
 const chartDataOneSensor2 = (req, res) => {
@@ -91,9 +109,34 @@ const chartDataOneSensor2 = (req, res) => {
   });
 };
 
+const chartPower = (req,res)=>{
+  console.log('xxx',req.query)
+  let home_id = req.query.home_id
+  Sensor.findOne({
+    where:{home_id:home_id,sensor_type:'Power'}
+  }).then((result)=>{
+    let sensor_id = result.dataValues.sensor_id
+    Sensor.hasOne(Sensor_data, { foreignKey: "sensor_id" });
+    Sensor_data.belongsTo(Sensor, { foreignKey: "sensor_id" });
+    Sensor_data.findOne({
+      where: { sensor_id: sensor_id },
+      order: [["sensor_data_id", "DESC"]],
+      include: [
+        {
+          model: Sensor,
+          attributes: ["sensor_name"],
+        },
+      ],
+    }).then((result) => {
+      console.log(result)
+      res.json({ data: result });
+    });
+  })
 
 
-module.exports = { chartNameSensor, chartDataSensor, chartDataOneSensor, chartDataSensor2, chartDataOneSensor2 };
+}
+
+module.exports = { chartNameSensor, chartDataSensor, chartDataOneSensor, chartDataSensor2, chartDataOneSensor2,chartPower };
 
 
 

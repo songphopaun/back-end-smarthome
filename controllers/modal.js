@@ -8,7 +8,6 @@ const Users = require("../Model/users");
 const Icon = require("../Model/icon")
 
 const addRoom = (req, res) => {
-  console.log('req',req.body)
   const {name, path_icon, home_id} = req.body
 
   Room.create({
