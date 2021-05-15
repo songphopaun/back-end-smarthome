@@ -6,6 +6,7 @@ const Device = sequelize.define("device", {
         autoIncrement:true,
         primaryKey:true
     },
+    home_id:DataTypes.INTEGER,
     room_id:DataTypes.INTEGER,
     // sensor_id:DataTypes.INTEGER,
     device_name:DataTypes.STRING,

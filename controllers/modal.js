@@ -26,7 +26,7 @@ const addRoom = (req, res) => {
 };
 
 const addDevice = (req, res) => {
-  const { key, name, room, path_icon } = req.body;
+  const { key, name, room, path_icon, home_id } = req.body;
 
   Switch.findOne({ where: { key: key } }).then((result)=> {
     if (result) {
@@ -35,6 +35,7 @@ const addDevice = (req, res) => {
           room_id: room,
           device_name: name,
           device_icon: path_icon,
+          home_id:home_id
         })
         .then(() => {
           res
@@ -48,24 +49,6 @@ const addDevice = (req, res) => {
       res.status(400).json({ message: "Server is broken", status: false });
     }
   });
-
-
-  // Switch.create({
-  //   room_id: room,
-  //   device_name: name,
-  //   status: false,
-  //   value: 0,
-  //   type: types,
-  //   device_icon: path_icon,
-  // })
-  //   .then(() => {
-  //     res
-  //       .status(200)
-  //       .json({ message: "Device Added Successfully", status: true });
-  //   })
-  //   .catch(() => {
-  //     res.status(400).json({ message: "Server is broken", status: false });
-  //   });
 };
 
 const addSensor = (req, res) => {

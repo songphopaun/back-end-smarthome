@@ -22,6 +22,7 @@ const dataRoom = (req, res) => {
   Sensor.hasOne(Sensor_data, { foreignKey: "sensor_id" });
   Sensor_data.belongsTo(Sensor, { foreignKey: "sensor_id" });
   let room_id = req.query.room_id;
+  let home_id = req.query.home_id;
   let sensor_length = null;
   var id_sensor = [];
   var newData = []
@@ -35,12 +36,13 @@ const dataRoom = (req, res) => {
     }
   }).then(()=>{
     Sensor_data.findAll({
-      where: { room_id: room_id },
+      where: { room_id: room_id},
       order: [["sensor_id", "DESC"]],
       include: [
         {
           model: Sensor,
           attributes: ["sensor_name", "sensor_icon","sensor_unit"],
+          where:{home_id:home_id }
         },
       ],
     })
@@ -62,8 +64,9 @@ const dataRoom = (req, res) => {
 
 const deviceRoom = (req, res) => {
   let room_id = req.query.room_id;
+  let home_id = req.query.home_id
   Device.findAll({
-    where: { room_id: room_id },
+    where: { room_id: room_id,home_id:home_id },
     order: [["device_id", "DESC"]],
   }).then((result) => {
     if (result) {
