@@ -68,9 +68,12 @@ const login = (req, res) => {
 
 const loginFaceId = (req,res) =>{
   const id = req.headers.id
+  let key = {
+      key:id,
+  }
   Users.findOne({ where:{ user_id : id}}).then((result)=>{
     if(result){
-      let token = jwt.sign({ id }, "secretValue", { expiresIn: "48h" });
+      let token = jwt.sign({ key }, "secretValue", { expiresIn: "48h" });
       res.json({token:token})
     }
   })
